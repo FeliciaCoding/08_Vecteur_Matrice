@@ -1,16 +1,36 @@
 #include <iostream>
+#include <ostream>
 #include <cstdlib>
 #include <vector>
-#include <span>
-#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <limits>
 
 using namespace std;
 
+template<typename T>
+ostream &operator<<(ostream &os, vector<T> v) { //operator<<	Affiche un vecteur au format
+    os << "[";
+    for_each(v.begin(), v.end() - 1, [&os](int i) { os << i << ','; });
+    os << v[v.size() - 1];
+    return os << "]";
+}
+
+template<typename T>
+ostream &operator<<(ostream &os, vector<vector<T>> v) { //operator<<	Affiche un vecteur au format
+    os << "[";
+
+    for_each(v.begin(), v.end() - 1, [&os](vector<T> i) { os << i << ','; });
+    os << '[' << v[v.size() - 1] << ']';
+    return os << "]";
+}
+
+template<typename T>
 size_t lineSizeMin(){
     size_t result = 0;
     return result;
 };
-
+/*
 size_t sortMatrix(){
     size_t result = 0;
     return result;
@@ -19,23 +39,44 @@ size_t sortMatrix(){
 void lineSizeMax (){
 
 }
+*/
 
-template<typename T>
-ostream &operator<<(ostream &os, span<T> s) {
-    os << "[";
-    for (size_t i = 0; i < s.size(); ++i) {
-        if (i) os << ", ";
-        os << s[i];
-    }
-    return os << "]";
-}
+
 
 int main() {
 
-    // matrice        : [[5, 2, 8], [4, 3, 9], [1]]
-    vector< vector<int> > m;
-    cout << m << endl;
+    vector v{1, 2, 3, 4, 5, 1, 2, 3, 4};
+    cout << v;
 
+    vector<vector<int>> Matrix{{1, 2, 3},
+                               {8, 7, 6},
+                               {4, 9, 2},
+                               {1, 4, 5}};
+    cout << Matrix;
+
+    /*using Ligne3 = array<double, 3>;
+    Ligne3 maLigne{1,2,3};
+    using Matrice3x3 = array<Ligne3, 3>;
+    Matrice3x3 maMatrice{maLigne};
+    for (Ligne3& ligne : matrice) {
+        for (double element : ligne)
+            cout << element << " => ";
+        cout << endl;
+    }
+
+    // PRE
+    // lineSizeMin    : 1
+    // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
+    // lineSizeMax    : 3
+    // matrice        : [[5, 2, 8], [4, 3, 9], [1]]
+
+    vector<int> line (4, 0);
+    cout << "vector   : " << span<int>(line) << endl;
+
+    vector<vector<int>> matrix4x3 (4, vector<int>(3, 0.));
+    for (size_t i; i < matrix4x3[3].size(); ++i){
+        cout << "matrix   : " << span<int>(line) << endl;
+    }*/
 
 
     // isSquare       : no
@@ -55,10 +96,7 @@ int main() {
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
 
-    // PRE
-    // lineSizeMin    : 1
-    // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
-    // lineSizeMax    : 3
+
 
 
 
