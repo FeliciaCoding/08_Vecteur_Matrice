@@ -195,4 +195,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Other files
+*.py
+
 # End of https://www.toptal.com/developers/gitignore/api/c++,clion+all,macos,windows

@@ -48,6 +48,7 @@ void printMatrix(const string &message, vector<vector<T>> &matrice) {
 template<typename T>
 void shuffleVector(vector<T> &v) {
 
+    // Reference: https://cplusplus.com/reference/algorithm/shuffle/?kw=shuffle
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
     shuffle(v.begin(), v.end(), default_random_engine(seed));
