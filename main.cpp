@@ -33,7 +33,7 @@ ostream &operator<<(ostream &os, vector<vector<T>> v) { //operator<<	Affiche un 
     os << "[";
 
     for_each(v.begin(), v.end() - 1, [&os](vector<T> i) { os << i << ','; });
-    os << '[' << v[v.size() - 1] << ']';
+    os << v[v.size() - 1];
     return os << "]";
 }
 
@@ -115,7 +115,6 @@ int main() {
     shuffleMatrix(matrice);
 
     // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
-
 
 
 
