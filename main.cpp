@@ -61,7 +61,6 @@ void shuffleRow(vector<T> &row) {
     shuffleVector(row);
 }
 
-
 template<typename T>
 
 void shuffleMatrix(vector<vector<T>> &matrice) {
@@ -71,6 +70,20 @@ void shuffleMatrix(vector<vector<T>> &matrice) {
     printMatrix(SHUFFLE_MRIX_TITLE, matrice);
 
 }
+
+template<typename T>
+bool compareMin(const vector<T>& v1, const vector<T>& v2){
+    auto min1 = *min_element(v1.begin(), v1.end());
+    auto min2 = *min_element(v2.begin(), v2.end());
+    return min1 < min2;
+}
+
+template<typename T>
+void sortMatrix (vector<vector<T>>& matrice){ // par valeur ou par référence ??
+    sort(matrice.begin(), matrice.end(), compareMin<T>);
+    printMatrix(SORT_MRIX_TITLE, matrice);
+}
+
 
 
 int main() {
@@ -116,7 +129,7 @@ int main() {
     shuffleMatrix(matrice);
 
     // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
-
+    sortMatrix(matrice);
 
 
     return EXIT_SUCCESS;
