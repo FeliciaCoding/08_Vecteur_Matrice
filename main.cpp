@@ -5,7 +5,6 @@
 #include <numeric>
 #include <vector>
 #include <random>
-#include <iterator>
 
 const std::string MATRICE_TITLE      = "matrice";
 const std::string SQUARE_TITLE       = "isSquare";
@@ -38,24 +37,24 @@ std::ostream &operator<<(std::ostream &os, std::vector<std::vector<T>> v) { //op
 template<typename T>
 void printMatrix(const std::string &message, std::vector<std::vector<T>> &matrice) {
     std::cout << std::left << std::setw(15) << message << ": "
-         << matrice << std::endl;
+              << matrice << std::endl;
 
 }
 
-void printBool(const std::string &message, bool value){
+void printBool(const std::string &message, bool value) {
     std::cout << std::left << std::setw(15) << message << ": "
-        << (value ? "yes" : "no") << std::endl;
+              << (value ? "yes" : "no") << std::endl;
 }
 
 template<typename T>
-bool isSquare(const std::vector<std::vector<T>> &matrice){
+bool isSquare(const std::vector<std::vector<T>> &matrice) {
 
-    if (matrice.empty()){
+    if (matrice.empty()) {
         return false;
     }
 
-    size_t numCol= matrice[0].size();
-    return std::all_of(matrice.begin(),matrice.end(), [numCol](const auto& row){
+    size_t numCol = matrice[0].size();
+    return std::all_of(matrice.begin(), matrice.end(), [numCol](const auto &row) {
         return row.size() == numCol;
     });
 
@@ -115,7 +114,7 @@ int main() {
 
 
     // isSquare       : no
-    printBool(SQUARE_TITLE,isSquare(matrice));
+    printBool(SQUARE_TITLE, isSquare(matrice));
 
     // isRegular      : no
 
