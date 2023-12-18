@@ -25,11 +25,26 @@ ostream &operator<<(ostream &os, vector<vector<T>> v) { //operator<<	Affiche un 
     return os << "]";
 }
 
-template<typename T>
-size_t lineSizeMin(){
-    size_t result = 0;
-    return result;
-};
+void print(int i) { cout << i << ' '; }
+
+template<typename T, typename It>
+size_t lineSizeMin(const vector<vector<T>> &vect) {
+    if (vect.empty()) { return 0; }
+    auto smallestVector = min_element(vect.begin(), vect.end(),
+                                      [](const vector<int> &a, const vector<int> &b) { return a.size() < b.size(); });
+
+    return smallestVector->size();
+}
+
+template<typename T, typename It>
+size_t lineSizeMax(const vector<vector<T>> &vect) {
+    if (vect.empty()) { return 0; }
+    auto bigestVector = min_element(vect.begin(), vect.end(),
+                                      [](const vector<int> &a, const vector<int> &b) { return a.size() > b.size(); });
+
+    return bigestVector->size();
+}
+
 /*
 size_t sortMatrix(){
     size_t result = 0;
@@ -46,13 +61,16 @@ void lineSizeMax (){
 int main() {
 
     vector v{1, 2, 3, 4, 5, 1, 2, 3, 4};
-    cout << v;
+    cout << v << endl;
 
     vector<vector<int>> Matrix{{1, 2, 3},
-                               {8, 7, 6},
+                               {8, 4, 5, 6, 4, 5, 6},
                                {4, 9, 2},
-                               {1, 4, 5}};
-    cout << Matrix;
+                               {1}};
+    cout << Matrix << endl;
+
+    cout << "lineSizeMin renvoie : " << lineSizeMin<int, vector<vector<int>>::iterator>(Matrix) << endl;
+    cout << "lineSizeMax renvoie : " << lineSizeMax<int, vector<vector<int>>::iterator>(Matrix) << endl;
 
     /*using Ligne3 = array<double, 3>;
     Ligne3 maLigne{1,2,3};
@@ -95,10 +113,6 @@ int main() {
 
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
-
-
-
-
 
     return EXIT_SUCCESS;
 }
