@@ -5,6 +5,7 @@
 #include <numeric>
 #include <vector>
 #include <random>
+#include <functional>
 
 const std::string MATRICE_TITLE      = "matrice";
 const std::string SQUARE_TITLE       = "isSquare";
@@ -56,15 +57,29 @@ bool isSquare(const std::vector<std::vector<T>> &matrice) {
         return false;
     }
 
-    size_t numCol = matrice[0].size();
+    size_t numCol = matrice.size();
     return std::all_of(matrice.begin(), matrice.end(), [numCol](const auto &row) {
         return row.size() == numCol;
     });
 
 }
 
+template<typename T>
+bool isRegular(const std::vector<std::vector<T>> &matrice) {
 
-template<typename T, typename It>
+    if (matrice.empty()) {
+        return false;
+    }
+
+    size_t numRow1 = matrice[0].size();
+    return std::all_of(matrice.begin(), matrice.end(), [numRow1](const auto &row) {
+        return row.size() == numRow1;
+    });
+
+}
+
+
+template<typename T, typename Iterator>
 size_t lineSizeMin(const std::vector<std::vector<T>> &vect) {
     if (vect.empty()) { return 0; }
     auto smallestVector = min_element(vect.begin(), vect.end(),
@@ -76,7 +91,7 @@ size_t lineSizeMin(const std::vector<std::vector<T>> &vect) {
 
 }
 
-template<typename T, typename It>
+template<typename T, typename Iterator>
 size_t lineSizeMax(const std::vector<std::vector<T>> &vect) {
     if (vect.empty()) { return 0; }
     auto bigestVector = min_element(vect.begin(), vect.end(),
@@ -86,6 +101,40 @@ size_t lineSizeMax(const std::vector<std::vector<T>> &vect) {
 
     return bigestVector->size();
 }
+
+
+template<typename T>
+std::vector<T> vectSumLine(const std::vector<std::vector<T>> &matrice) {
+    if (matrice.empty()) {
+        return {};
+    }
+
+    std::vector<T> result = {};
+    std::for_each(matrice.begin(), matrice.end(), [&result](const auto &row) {
+        T sumLine = std::accumulate(row.begin(), row.end(), static_cast<T>(0));
+        result.push_back(sumLine);
+    });
+
+    return result;
+
+}
+
+//// TODO : vectSumColumn
+//template<typename T>
+//std::vector<T> vectSumColumn(const std::vector<std::vector<T>> &matrice) {
+//    if (matrice.empty()) {
+//        return {};
+//    }
+//
+//    std::vector<T> result = {};
+//    std::for_each(matrice.begin(), matrice.end(), [&result]( const auto &row1, const auto &row2) {
+//        T sumCol = // std::accumulate(row1[0].begin(), col.end(), static_cast<T>(0));
+//        result.push_back(sumCol);
+//    });
+//
+//    return result;
+//
+//}
 
 template<typename T>
 std::vector<T> vectorSumMin(const std::vector<std::vector<T>> &matrice) {
@@ -144,8 +193,6 @@ using namespace std;
 
 int main() {
 
-
-
     // matrice        : [[5, 2, 8], [4, 3, 9], [1]]
     using VectorInt = vector<int>;
     using Matrix = vector<VectorInt>;
@@ -158,33 +205,30 @@ int main() {
 
     print(MATRICE_TITLE, matrice);
 
-
     // isSquare       : no
     printBool(SQUARE_TITLE, isSquare(matrice));
 
     // isRegular      : no
-
+    printBool(REGULAR_TITLE, isRegular(matrice));
 
     // lineSizeMin    : 1
-    //// TODO : done by Paul, waiting for merging
-    //cout << "lineSizeMin renvoie : " << lineSizeMin<int, vector<vector<int>>::iterator>(matrice) << endl;
     auto sizeMin = lineSizeMin<int, vector<vector<int>>::iterator>(matrice);
     print(LINE_MIN_TITLE, sizeMin);
 
     // lineSizeMax    : 3
-    //// TODO : done by Paul, waiting for merging
-    //cout << "lineSizeMax renvoie : " << lineSizeMax<int, vector<vector<int>>::iterator>(matrice) << endl;
     auto sizeMax = lineSizeMax<int, vector<vector<int>>::iterator>(matrice);
     print(LINE_MAX_TITLE, sizeMax);
 
     // vectSumLine    : [15, 16, 1]
-    //// TODO : done by Cédric, waiting for merging
+    auto vSumLine = vectSumLine(matrice);
+    print(VECT_LINE_TITLE, vSumLine);
 
     // vectSumColumn  : [10, 5, 17]
-
+//    auto vSumCol = vectSumColumn(matrice);
+//    print(VECT_COL_TITLE, vSumCol);
 
     // vectorSumMin   : [1]
-    VectorInt vSumMin = vectorSumMin(matrice);
+    auto vSumMin = vectorSumMin(matrice);
     print(VECT_MIN_TITLE, vSumMin);
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
@@ -192,7 +236,6 @@ int main() {
 
     // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
     sortMatrix(matrice);
-
 
     return EXIT_SUCCESS;
 }
