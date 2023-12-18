@@ -20,7 +20,7 @@ const std::string SORT_MRIX_TITLE    = "sortMatrix";
 
 
 template<typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) { //operator<<	Affiche un vecteur au format
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     os << "[";
     for_each(v.begin(), v.end() - 1, [&os](const T &i) { os << i << ','; });
     os << v[v.size() - 1];
@@ -30,7 +30,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) { //operator
 
 template<typename T>
 std::ostream &
-operator<<(std::ostream &os, const std::vector<std::vector<T>> &v) { //operator<<	Affiche un matrix au format
+operator<<(std::ostream &os, const std::vector<std::vector<T>> &v) {
     os << "[";
     for_each(v.begin(), v.end() - 1, [&os](std::vector<T> i) { os << i << ','; });
     os << v[v.size() - 1];
@@ -119,22 +119,21 @@ std::vector<T> vectSumLine(const std::vector<std::vector<T>> &matrice) {
 
 }
 
-//// TODO : vectSumColumn
-//template<typename T>
-//std::vector<T> vectSumColumn(const std::vector<std::vector<T>> &matrice) {
-//    if (matrice.empty()) {
-//        return {};
-//    }
-//
-//    std::vector<T> result = {};
-//    std::for_each(matrice.begin(), matrice.end(), [&result]( const auto &row1, const auto &row2) {
-//        T sumCol = // std::accumulate(row1[0].begin(), col.end(), static_cast<T>(0));
-//        result.push_back(sumCol);
-//    });
-//
-//    return result;
-//
-//}
+template<typename T>
+std::vector<T> vectSumColumn(const std::vector<std::vector<T>> &matrice) {
+    if (matrice.empty()) {
+        return {};
+    }
+
+    std::vector<T> result(matrice[0].size(), 0);
+    std::for_each(matrice.begin(), matrice.end(), [&result](const auto &row) {
+        std::transform(row.begin(), row.end(), result.begin(), result.begin(),
+                       [](auto value1, auto value2) { return value1 + value2; });
+    });
+
+    return result;
+
+}
 
 template<typename T>
 std::vector<T> vectorSumMin(const std::vector<std::vector<T>> &matrice) {
@@ -171,7 +170,7 @@ void shuffleRow(std::vector<T> &row) {
 
 template<typename T>
 void shuffleMatrix(std::vector<std::vector<T>> &matrice) {
-    for_each(matrice.begin(), matrice.end(), shuffleRow<T>);;
+    for_each(matrice.begin(), matrice.end(), shuffleRow<T>);
     print(SHUFFLE_MRIX_TITLE, matrice);
 }
 
@@ -183,7 +182,7 @@ bool compareMin(const std::vector<T> &v1, const std::vector<T> &v2) {
 }
 
 template<typename T>
-void sortMatrix(std::vector<std::vector<T>> &matrice) { // par valeur ou par référence ??
+void sortMatrix(std::vector<std::vector<T>> &matrice) {
     sort(matrice.begin(), matrice.end(), compareMin<T>);
     print(SORT_MRIX_TITLE, matrice);
 }
@@ -193,7 +192,6 @@ using namespace std;
 
 int main() {
 
-    // matrice        : [[5, 2, 8], [4, 3, 9], [1]]
     using VectorInt = vector<int>;
     using Matrix = vector<VectorInt>;
 
@@ -202,39 +200,38 @@ int main() {
     const VectorInt V3 = {1};
 
     Matrix matrice = {V1, V2, V3};
-
     print(MATRICE_TITLE, matrice);
 
-    // isSquare       : no
+
     printBool(SQUARE_TITLE, isSquare(matrice));
 
-    // isRegular      : no
+
     printBool(REGULAR_TITLE, isRegular(matrice));
 
-    // lineSizeMin    : 1
+
     auto sizeMin = lineSizeMin<int, vector<vector<int>>::iterator>(matrice);
     print(LINE_MIN_TITLE, sizeMin);
 
-    // lineSizeMax    : 3
+
     auto sizeMax = lineSizeMax<int, vector<vector<int>>::iterator>(matrice);
     print(LINE_MAX_TITLE, sizeMax);
 
-    // vectSumLine    : [15, 16, 1]
+
     auto vSumLine = vectSumLine(matrice);
     print(VECT_LINE_TITLE, vSumLine);
 
-    // vectSumColumn  : [10, 5, 17]
-//    auto vSumCol = vectSumColumn(matrice);
-//    print(VECT_COL_TITLE, vSumCol);
 
-    // vectorSumMin   : [1]
+    auto vSumCol = vectSumColumn(matrice);
+    print(VECT_COL_TITLE, vSumCol);
+
+
     auto vSumMin = vectorSumMin(matrice);
     print(VECT_MIN_TITLE, vSumMin);
 
-    // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
+
     shuffleMatrix(matrice);
 
-    // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
+
     sortMatrix(matrice);
 
     return EXIT_SUCCESS;
