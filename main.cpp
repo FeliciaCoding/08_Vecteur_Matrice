@@ -19,20 +19,23 @@ const std::string SORT_MRIX_TITLE    = "sortMatrix";
 
 
 template<typename T>
-std::ostream &operator<<(std::ostream &os, std::vector<T> v) { //operator<<	Affiche un vecteur au format
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) { //operator<<	Affiche un vecteur au format
     os << "[";
-    for_each(v.begin(), v.end() - 1, [&os](int i) { os << i << ','; });
+    for_each(v.begin(), v.end() - 1, [&os](const T &i) { os << i << ','; });
     os << v[v.size() - 1];
     return os << "]";
 }
 
+
 template<typename T>
-std::ostream &operator<<(std::ostream &os, std::vector<std::vector<T>> v) { //operator<<	Affiche un vecteur au format
+std::ostream &
+operator<<(std::ostream &os, const std::vector<std::vector<T>> &v) { //operator<<	Affiche un matrix au format
     os << "[";
     for_each(v.begin(), v.end() - 1, [&os](std::vector<T> i) { os << i << ','; });
     os << v[v.size() - 1];
     return os << "]";
 }
+
 
 template<typename T>
 void printMatrix(const std::string &message, std::vector<std::vector<T>> &matrice) {
@@ -47,6 +50,14 @@ void printBool(const std::string &message, bool value) {
 }
 
 template<typename T>
+void printVector(const std::string &message, std::vector<T> &matrice) {
+    std::cout << std::left << std::setw(15) << message << ": "
+              << matrice << std::endl;
+
+}
+
+
+template<typename T>
 bool isSquare(const std::vector<std::vector<T>> &matrice) {
 
     if (matrice.empty()) {
@@ -57,6 +68,26 @@ bool isSquare(const std::vector<std::vector<T>> &matrice) {
     return std::all_of(matrice.begin(), matrice.end(), [numCol](const auto &row) {
         return row.size() == numCol;
     });
+
+}
+
+
+template<typename T>
+std::vector<T> vectorSumMin(const std::vector<std::vector<T>> &matrice) {
+    if (matrice.empty()) {
+        return {};
+    }
+
+    auto minSumIterator = std::min_element(matrice.begin(), matrice.end(), [](const auto &row1, const auto &row2) {
+        return (std::accumulate(row1.begin(), row1.end(), static_cast<T>(0))) <
+               (std::accumulate(row2.begin(), row2.end(), static_cast<T>(0)));
+    });
+
+    if (minSumIterator != matrice.end()) {
+        return *minSumIterator;
+    } else {
+        return {};
+    }
 
 }
 
@@ -120,19 +151,20 @@ int main() {
 
 
     // lineSizeMin    : 1
-
+    //// TODO : done by Paul, waiting for merging
 
     // lineSizeMax    : 3
-
+    //// TODO : done by Paul, waiting for merging
 
     // vectSumLine    : [15, 16, 1]
-
+    //// TODO : done by Cédric, waiting for merging
 
     // vectSumColumn  : [10, 5, 17]
 
 
     // vectorSumMin   : [1]
-
+    VectorInt vSumMin = vectorSumMin(matrice);
+    printVector(VECT_MIN_TITLE, vSumMin);
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
     shuffleMatrix(matrice);
