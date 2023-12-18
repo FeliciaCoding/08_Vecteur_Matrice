@@ -10,7 +10,7 @@ const std::string MATRICE_TITLE      = "matrice";
 const std::string SQUARE_TITLE       = "isSquare";
 const std::string REGULAR_TITLE      = "isRegular";
 const std::string LINE_MIN_TITLE     = "lineSizeMin";
-const std::string LINE_MAN_TITLE     = "lineSizeMax";
+const std::string LINE_MAX_TITLE     = "lineSizeMax";
 const std::string VECT_LINE_TITLE    = "vectSumLine";
 const std::string VECT_COL_TITLE     = "vectSumColumn";
 const std::string VECT_MIN_TITLE     = "vectorSumMin";
@@ -38,22 +38,14 @@ operator<<(std::ostream &os, const std::vector<std::vector<T>> &v) { //operator<
 
 
 template<typename T>
-void printMatrix(const std::string &message, std::vector<std::vector<T>> &matrice) {
-    std::cout << std::left << std::setw(15) << message << ": "
-              << matrice << std::endl;
-
+void print(const std::string &message, T &value) {
+    std::cout << std::left << std::setw(15) << message << ": " << value << std::endl;
 }
+
 
 void printBool(const std::string &message, bool value) {
     std::cout << std::left << std::setw(15) << message << ": "
               << (value ? "yes" : "no") << std::endl;
-}
-
-template<typename T>
-void printVector(const std::string &message, std::vector<T> &matrice) {
-    std::cout << std::left << std::setw(15) << message << ": "
-              << matrice << std::endl;
-
 }
 
 
@@ -71,6 +63,29 @@ bool isSquare(const std::vector<std::vector<T>> &matrice) {
 
 }
 
+
+template<typename T, typename It>
+size_t lineSizeMin(const std::vector<std::vector<T>> &vect) {
+    if (vect.empty()) { return 0; }
+    auto smallestVector = min_element(vect.begin(), vect.end(),
+                                      [](const std::vector<int> &a, const std::vector<int> &b) {
+                                          return a.size() < b.size();
+                                      });
+
+    return smallestVector->size();
+
+}
+
+template<typename T, typename It>
+size_t lineSizeMax(const std::vector<std::vector<T>> &vect) {
+    if (vect.empty()) { return 0; }
+    auto bigestVector = min_element(vect.begin(), vect.end(),
+                                    [](const std::vector<int> &a, const std::vector<int> &b) {
+                                        return a.size() > b.size();
+                                    });
+
+    return bigestVector->size();
+}
 
 template<typename T>
 std::vector<T> vectorSumMin(const std::vector<std::vector<T>> &matrice) {
@@ -108,7 +123,7 @@ void shuffleRow(std::vector<T> &row) {
 template<typename T>
 void shuffleMatrix(std::vector<std::vector<T>> &matrice) {
     for_each(matrice.begin(), matrice.end(), shuffleRow<T>);;
-    printMatrix(SHUFFLE_MRIX_TITLE, matrice);
+    print(SHUFFLE_MRIX_TITLE, matrice);
 }
 
 template<typename T>
@@ -121,7 +136,7 @@ bool compareMin(const std::vector<T> &v1, const std::vector<T> &v2) {
 template<typename T>
 void sortMatrix(std::vector<std::vector<T>> &matrice) { // par valeur ou par référence ??
     sort(matrice.begin(), matrice.end(), compareMin<T>);
-    printMatrix(SORT_MRIX_TITLE, matrice);
+    print(SORT_MRIX_TITLE, matrice);
 }
 
 
@@ -141,7 +156,7 @@ int main() {
 
     Matrix matrice = {V1, V2, V3};
 
-    printMatrix(MATRICE_TITLE, matrice);
+    print(MATRICE_TITLE, matrice);
 
 
     // isSquare       : no
@@ -152,9 +167,15 @@ int main() {
 
     // lineSizeMin    : 1
     //// TODO : done by Paul, waiting for merging
+    //cout << "lineSizeMin renvoie : " << lineSizeMin<int, vector<vector<int>>::iterator>(matrice) << endl;
+    auto sizeMin = lineSizeMin<int, vector<vector<int>>::iterator>(matrice);
+    print(LINE_MIN_TITLE, sizeMin);
 
     // lineSizeMax    : 3
     //// TODO : done by Paul, waiting for merging
+    //cout << "lineSizeMax renvoie : " << lineSizeMax<int, vector<vector<int>>::iterator>(matrice) << endl;
+    auto sizeMax = lineSizeMax<int, vector<vector<int>>::iterator>(matrice);
+    print(LINE_MAX_TITLE, sizeMax);
 
     // vectSumLine    : [15, 16, 1]
     //// TODO : done by Cédric, waiting for merging
@@ -164,7 +185,7 @@ int main() {
 
     // vectorSumMin   : [1]
     VectorInt vSumMin = vectorSumMin(matrice);
-    printVector(VECT_MIN_TITLE, vSumMin);
+    print(VECT_MIN_TITLE, vSumMin);
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
     shuffleMatrix(matrice);
