@@ -5,6 +5,7 @@
 #include <numeric>
 #include <vector>
 #include <random>
+#include <iterator>
 
 const std::string MATRICE_TITLE      = "matrice";
 const std::string SQUARE_TITLE       = "isSquare";
@@ -41,6 +42,24 @@ void printMatrix(const std::string &message, std::vector<std::vector<T>> &matric
 
 }
 
+void printBool(const std::string &message, bool value){
+    std::cout << std::left << std::setw(15) << message << ": "
+        << (value ? "yes" : "no") << std::endl;
+}
+
+template<typename T>
+bool isSquare(const std::vector<std::vector<T>> &matrice){
+
+    if (matrice.empty()){
+        return false;
+    }
+
+    size_t numCol= matrice[0].size();
+    return std::all_of(matrice.begin(),matrice.end(), [numCol](const auto& row){
+        return row.size() == numCol;
+    });
+
+}
 
 template<typename T>
 void shuffleVector(std::vector<T> &v) {
@@ -96,7 +115,7 @@ int main() {
 
 
     // isSquare       : no
-
+    printBool(SQUARE_TITLE,isSquare(matrice));
 
     // isRegular      : no
 
@@ -117,7 +136,6 @@ int main() {
 
 
     // shuffleMatrix  : [[1], [4, 3, 9], [5, 2, 8]]	// exemple
-
     shuffleMatrix(matrice);
 
     // sortMatrix     : [[1], [5, 2, 8], [4, 3, 9]]
